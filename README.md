@@ -10,7 +10,7 @@ Clone the code and start enjoying
 Have a nice time
 
 # Demo Video
-<img src=".demo.gif" width=500px> 
+<img src="./demo.gif" width=600px> 
 
 # How to get started with it?
 ```
