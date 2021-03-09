@@ -114,7 +114,12 @@ class Ui_MainWindow(object):
                     if j == None:
                         d = [data.index(i), i.index(j)]
                         none_data.append(d)
-            return random.choice(none_data)
+            try:
+                rand = random.choice(none_data)
+                return rand
+            except:
+                return None
+            
 
         self.is_done = False
         def tic_btn_click(index):
@@ -135,37 +140,38 @@ class Ui_MainWindow(object):
                         background-color: transparent;
                     }  
                     """)
-                self.tic_tac_lst[index[0]][index[1]] = 1
-                result = who_won(self.tic_tac_lst)
-                if result == False:
-                    comp = comp_play(self.tic_tac_lst)
-                    self.tic_tac_lst[comp[0]][comp[1]] = 0
-                    result_again = who_won(self.tic_tac_lst)
-                    if result_again == True:
-                        self.turn_label.setText("Computer won")
+                    self.tic_tac_lst[index[0]][index[1]] = 1
+                    result = who_won(self.tic_tac_lst)
+                    if result == False:
+                        comp = comp_play(self.tic_tac_lst)
+                        if comp != None:
+                            self.tic_tac_lst[comp[0]][comp[1]] = 0
+                            btn_comp = self.tic_lst[comp[0]][comp[1]]                          
+                            btn_comp.setText("O")
+                            btn_comp.setStyleSheet("""
+                            QPushButton {
+                                background-color: transparent;
+                                font-size: 30px;
+                                font-family: 'Poppins', sans-serif;
+                            }
+                            QPushButton:hover {
+                                background-color: transparent;
+                            }
+                            QPushButton:pressed {
+                                background-color: transparent;
+                            }  
+                            """)
+                            result_again = who_won(self.tic_tac_lst)
+                            if result_again == False:
+                                pass
+                            else:
+                                self.turn_label.setText("Computer won")
+                                self.turn_label.repaint()
+                                self.is_done = True
+                    else:
+                        self.turn_label.setText("You won")
                         self.turn_label.repaint()
                         self.is_done = True
-                    else:
-                        comp = comp_play(self.tic_tac_lst)
-                        btn_comp = self.tic_lst[comp[0]][comp[1]]
-                        btn_comp.setText("O")
-                        btn_comp.setStyleSheet("""
-                        QPushButton {
-                            background-color: transparent;
-                            font-size: 30px;
-                            font-family: 'Poppins', sans-serif;
-                        }
-                        QPushButton:hover {
-                            background-color: transparent;
-                        }
-                        QPushButton:pressed {
-                            background-color: transparent;
-                        }  
-                        """)
-                else:
-                    self.turn_label.setText("You won")
-                    self.turn_label.repaint()
-                    self.is_done = True
 
         self.tic_widget = QtWidgets.QWidget()
         def create_tic_box():
@@ -190,6 +196,8 @@ class Ui_MainWindow(object):
         def reset_clicked():
             self.is_done = False
             self.tic_lst = []
+            self.tic_tac_lst = [[None for i in range(3)] for j in range(3)]
+            self.turn_label.setText("Game Started")
             create_tic_box()
         self.reset_btn.clicked.connect(lambda: reset_clicked())
         
