@@ -75,36 +75,78 @@ class Ui_MainWindow(object):
         self.turn_label.setAlignment(QtCore.Qt.AlignCenter)
         self.mainlay.addWidget(self.turn_label)
         self.tic_lst = []
+
+
+        self.tic_tac_lst = [[None for i in range(3)] for j in range(3)]
+        def who_won(data):
+            pos_1 = [i[0] for i in data]
+            pos_2 = [i[1] for i in data]
+            pos_3 = [i[2] for i in data]
+            pos_4 = data[0]
+            pos_5 = data[1]
+            pos_6 = data[2]
+            pos_7 = []
+            pos_8 = []
+            i_ = 0
+            j_ = 2
+            for i in data:
+                pos_7.append(i[i_])
+                pos_8.append(i[j_])
+                i_ += 1
+                j_ -= 1
+            all_pos = [pos_1, pos_2, pos_3, pos_4, pos_5, pos_6, pos_7, pos_8]
+            for p in all_pos:
+                if p[0] != None:
+                    init = p[0]
+                    init_lst = []
+                    for i in p:
+                        if i != init:
+                            break
+                        else:
+                            init_lst.append(i)
+                    if len(init_lst) == 3:
+                        return [p, all_pos.index(p)+1]
+            return False
+
+
+        self.is_done = False
         def tic_btn_click(index):
-            
-            for i in self.tic_lst:
-                if i[0] == index:
-                    btn = i[1]
-                    btn.setText("X")
-                    btn.setStyleSheet("""
-                    QPushButton {
-                        background-color: transparent;
-                        font-size: 30px;
-                        font-family: 'Poppins', sans-serif;
-                    }
-                    QPushButton:hover {
-                        background-color: transparent;
-                    }
-                    QPushButton:pressed {
-                        background-color: transparent;
-                    }  
-                    """)
-                    break
+            if self.is_done != True:
+                if self.tic_tac_lst[index[0]][index[1]] == None:
+                    for i in self.tic_lst:
+                        if i[0] == index:
+                            btn = i[1]
+                            btn.setText("X")
+                            btn.setStyleSheet("""
+                            QPushButton {
+                                background-color: transparent;
+                                font-size: 30px;
+                                font-family: 'Poppins', sans-serif;
+                            }
+                            QPushButton:hover {
+                                background-color: transparent;
+                            }
+                            QPushButton:pressed {
+                                background-color: transparent;
+                            }  
+                            """)
+                            break
+                    self.tic_tac_lst[index[0]][index[1]] = 1
+                    result = who_won(self.tic_tac_lst)
+                    if result == False:
+                        pass
+                    else:
+                        self.turn_label.setText("Won!!")
+                        self.is_done = True
 
         self.tic_widget = QtWidgets.QWidget()
         def create_tic_box():
             self.tic_widget.deleteLater()
             self.tic_widget = QtWidgets.QWidget()
             vertical_lay = QtWidgets.QVBoxLayout(self.tic_widget)
-            for i in range(1,4):
+            for i in range(3):
                 horizontal_layout = QtWidgets.QHBoxLayout()
-                #local_threads = []
-                for j in range(1,4):
+                for j in range(3):
                     tic_box = QtWidgets.QPushButton()
                     tic_box.setFixedSize(int(self.win_width/4), int(self.win_height/6))
                     tic_box.clicked.connect(lambda checked, i=[i,j]:tic_btn_click(i))
