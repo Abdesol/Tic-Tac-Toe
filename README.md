@@ -1,5 +1,5 @@
 # Tic-Tac-Toe
-A Tic Tac Toe game made with a professional UI
+## A Tic Tac Toe game made with a professional UI
 
 Hello, My name is Abdella Solomon, This is a Tic Tac Toe game made by me. It is made with PyQt5.
 
@@ -10,7 +10,7 @@ Clone the code and start enjoying
 Have a nice time
 
 # Demo Video
-
+<img src=".demo.gif" width=500px> 
 
 # How to get started with it?
 ```
