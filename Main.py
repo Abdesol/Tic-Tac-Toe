@@ -71,15 +71,12 @@ class Ui_MainWindow(object):
         self.reset_lay.addStretch(1)
         self.mainlay.addLayout(self.reset_lay)
         self.turn_label = QtWidgets.QLabel()
-        self.turn_label.setText("Yours turn")
+        self.turn_label.setText("Game Started")
         self.turn_label.setAlignment(QtCore.Qt.AlignCenter)
         self.mainlay.addWidget(self.turn_label)
         self.tic_lst = []
         def tic_btn_click(index):
-            self.turn_label.setText("Computers turn")
-            time.sleep(3)
-            self.turn_label.setText("Yours turn")
-            self.turn_label.repaint()
+            
             for i in self.tic_lst:
                 if i[0] == index:
                     btn = i[1]
@@ -110,7 +107,7 @@ class Ui_MainWindow(object):
                 for j in range(1,4):
                     tic_box = QtWidgets.QPushButton()
                     tic_box.setFixedSize(int(self.win_width/4), int(self.win_height/6))
-                    tic_box.clicked.connect(lambda checked, i=i:tic_btn_click(i))
+                    tic_box.clicked.connect(lambda checked, i=[i,j]:tic_btn_click(i))
                     horizontal_layout.addWidget(tic_box)
                     self.tic_lst.append([[i,j],tic_box])
                 vertical_lay.addLayout(horizontal_layout)
