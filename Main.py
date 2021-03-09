@@ -1,6 +1,5 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-from win32api import GetSystemMetrics
-import math, time, threading, sys
+import math, sys, random
 
 
 class Ui_MainWindow(object):
@@ -108,36 +107,65 @@ class Ui_MainWindow(object):
                         return [p, all_pos.index(p)+1]
             return False
 
+        def comp_play(data):
+            none_data = []
+            for i in data:
+                for j in i:
+                    if j == None:
+                        d = [data.index(i), i.index(j)]
+                        none_data.append(d)
+            return random.choice(none_data)
 
         self.is_done = False
         def tic_btn_click(index):
             if self.is_done != True:
                 if self.tic_tac_lst[index[0]][index[1]] == None:
-                    for i in self.tic_lst:
-                        if i[0] == index:
-                            btn = i[1]
-                            btn.setText("X")
-                            btn.setStyleSheet("""
-                            QPushButton {
-                                background-color: transparent;
-                                font-size: 30px;
-                                font-family: 'Poppins', sans-serif;
-                            }
-                            QPushButton:hover {
-                                background-color: transparent;
-                            }
-                            QPushButton:pressed {
-                                background-color: transparent;
-                            }  
-                            """)
-                            break
-                    self.tic_tac_lst[index[0]][index[1]] = 1
-                    result = who_won(self.tic_tac_lst)
-                    if result == False:
-                        pass
-                    else:
-                        self.turn_label.setText("Won!!")
+                    btn = self.tic_lst[index[0]][index[1]]
+                    btn.setText("X")
+                    btn.setStyleSheet("""
+                    QPushButton {
+                        background-color: transparent;
+                        font-size: 30px;
+                        font-family: 'Poppins', sans-serif;
+                    }
+                    QPushButton:hover {
+                        background-color: transparent;
+                    }
+                    QPushButton:pressed {
+                        background-color: transparent;
+                    }  
+                    """)
+                self.tic_tac_lst[index[0]][index[1]] = 1
+                result = who_won(self.tic_tac_lst)
+                if result == False:
+                    comp = comp_play(self.tic_tac_lst)
+                    self.tic_tac_lst[comp[0]][comp[1]] = 0
+                    result_again = who_won(self.tic_tac_lst)
+                    if result_again == True:
+                        self.turn_label.setText("Computer won")
+                        self.turn_label.repaint()
                         self.is_done = True
+                    else:
+                        comp = comp_play(self.tic_tac_lst)
+                        btn_comp = self.tic_lst[comp[0]][comp[1]]
+                        btn_comp.setText("O")
+                        btn_comp.setStyleSheet("""
+                        QPushButton {
+                            background-color: transparent;
+                            font-size: 30px;
+                            font-family: 'Poppins', sans-serif;
+                        }
+                        QPushButton:hover {
+                            background-color: transparent;
+                        }
+                        QPushButton:pressed {
+                            background-color: transparent;
+                        }  
+                        """)
+                else:
+                    self.turn_label.setText("You won")
+                    self.turn_label.repaint()
+                    self.is_done = True
 
         self.tic_widget = QtWidgets.QWidget()
         def create_tic_box():
@@ -146,18 +174,21 @@ class Ui_MainWindow(object):
             vertical_lay = QtWidgets.QVBoxLayout(self.tic_widget)
             for i in range(3):
                 horizontal_layout = QtWidgets.QHBoxLayout()
+                local_lst = []
                 for j in range(3):
                     tic_box = QtWidgets.QPushButton()
                     tic_box.setFixedSize(int(self.win_width/4), int(self.win_height/6))
                     tic_box.clicked.connect(lambda checked, i=[i,j]:tic_btn_click(i))
                     horizontal_layout.addWidget(tic_box)
-                    self.tic_lst.append([[i,j],tic_box])
+                    local_lst.append(tic_box)
+                self.tic_lst.append(local_lst)
                 vertical_lay.addLayout(horizontal_layout)
             self.mainlay.addWidget(self.tic_widget)
             
 
         create_tic_box()
         def reset_clicked():
+            self.is_done = False
             self.tic_lst = []
             create_tic_box()
         self.reset_btn.clicked.connect(lambda: reset_clicked())
