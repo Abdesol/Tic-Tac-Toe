@@ -122,7 +122,6 @@ class Ui_MainWindow(object):
         self.whose_turn = 1
         self.is_done = False
         def tic_btn_click(index):
-            print(self.whose_turn)
             if self.is_done != True:
                 if self.tic_tac_lst[index[0]][index[1]] == None:
                     btn = self.tic_lst[index[0]][index[1]]
@@ -144,7 +143,6 @@ class Ui_MainWindow(object):
                     }  
                     """)
                     self.tic_tac_lst[index[0]][index[1]] = self.whose_turn
-                    print(self.tic_tac_lst)
                     result = who_won(self.tic_tac_lst)
                     if result != False:
                         who = result[2]
