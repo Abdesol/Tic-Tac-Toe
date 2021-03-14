@@ -18,6 +18,9 @@ First open terminal and type:
 pip install -r requirements.txt
 
 Second:
-python main.py
+  #If you need the single player option:
+   python singleplayer.py
+  #If you need the multiplayer option:
+   python multiplayer.py
 ```
 ## Done!!
