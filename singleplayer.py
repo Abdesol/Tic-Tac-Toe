@@ -160,6 +160,17 @@ class Ui_MainWindow(object):
                             [[0,0], [2,2]],
                             [[0,2], [2,0]]
                         ]
+                        f = 0
+                        for i in pos:
+                            for j in i:
+                                if board[j[0]][j[1]] == None:
+                                    f = 1
+                                    break
+                        if f == 0:
+                            pos = [
+                                [[1,0], [1,2]],
+                                [[0,1], [2,1]]
+                            ]
                     elif comp_move == [1,0]:
                         pos = [
                             [[0,0], [2,0]],
