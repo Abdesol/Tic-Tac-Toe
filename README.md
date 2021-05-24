@@ -3,7 +3,7 @@
 
 Hello, My name is Abdella Solomon, This is a Tic Tac Toe game made by me. It is made with PyQt5.
 
-The limitation of the game is the Computer will not play with the most accuracy. I just make it tick randomly and this will be fixed after a time.
+The bot plays well in terms of defensing. Try it and let me know if you win the bot.
 
 What are you waiting for?
 Clone the code and start enjoying
