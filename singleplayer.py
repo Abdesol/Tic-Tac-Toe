@@ -159,14 +159,16 @@ class Ui_MainWindow(object):
                         pos_result.append(res)
                     print(pos_result)
                     max_pos = pos[pos_result.index(max(pos_result))]
+                    print(max_pos)
                     angle_pos = max_pos[1]
                     if board[angle_pos[0]][angle_pos[1]] == None:
                         comp_move = angle_pos
                     else:
-                        if max_pos[0] != None:
-                            comp_move = random_move()
+                        middle_pos = max_pos[0]
+                        if board[middle_pos[0]][middle_pos[1]] == None:
+                            comp_move = middle_pos
                         else:
-                            comp_move = max_pos[0]
+                            comp_move = random_move()
 
                 else:
                     k = 0
