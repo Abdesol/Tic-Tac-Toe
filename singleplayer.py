@@ -119,10 +119,13 @@ class Ui_MainWindow(object):
                 else:
                     return None
             if move == 1:
-                if board[1][1] == None:
-                    comp_move = [1,1]
+                if 1 in recent_move:
+                    if board[1][1] == None:
+                        comp_move = [1,1]
+                    else:
+                        comp_move = random.choice([[0,0], [0,2], [2,0], [2,2]])
                 else:
-                    comp_move = random.choice([[0,0], [0,2], [2,0], [2,2]])
+                    comp_move = [2-recent_move[0] , 2-recent_move[1]]
             else:
                 comp_move = recent_move
                 if 1 not in comp_move:
@@ -152,7 +155,12 @@ class Ui_MainWindow(object):
                         ]
 
                 else:
-                    if comp_move == [1,0]:
+                    if comp_move == [1,1]:
+                        pos = [
+                            [[0,0], [2,2]],
+                            [[0,2], [2,0]]
+                        ]
+                    elif comp_move == [1,0]:
                         pos = [
                             [[0,0], [2,0]],
                             [[1,1], [1,2]]
@@ -180,17 +188,52 @@ class Ui_MainWindow(object):
                         if board[j[0]][j[1]] == 0:
                             res += 1
                     pos_result.append(res)
-
+                print(pos_result)
                 max_pos = pos[pos_result.index(max(pos_result))]
                 pos_1 = max_pos[1]
-                if board[pos_1[0]][pos_1[1]] == None:
-                    comp_move = pos_1
-                else:
-                    pos_2 = max_pos[0]
-                    if board[pos_2[0]][pos_2[1]] == None:
-                        comp_move = pos_2
+                pos_2 = max_pos[0]
+                if comp_move == [1,1]:
+                    if pos_result[0] == pos_result[1]:
+                        
+                        pos_check = [
+                            [[0,0], [1,1], [2,2]],
+                            [[0,2], [1,1], [2,0]]
+                        ]
+                        pos_with_value = []
+                        for i in pos_check:
+                            p = []
+                            for j in i:
+                                p.append(board[j[0]][j[1]]) 
+                                pos_with_value.append(p)
+                        
+                        if 1 in pos_with_value[0]:
+                            for i in pos_check[1]:
+                                if board[i[0]][i[1]] == None:
+                                    comp_move = i
+                                    break
+                        else:
+                            for i in pos_check[0]:
+                                if board[i[0]][i[1]] == None:
+                                    comp_move = i
+                                    break
+
                     else:
-                        comp_move = random_move()
+                        if board[pos_1[0]][pos_1[1]] == None:
+                            comp_move = pos_1
+                        else:
+                            if board[pos_2[0]][pos_2[1]] == None:
+                                comp_move = pos_2
+                            else:
+                                comp_move = random_move()
+                else:
+                    if board[pos_1[0]][pos_1[1]] == None:
+                        comp_move = pos_1
+                    else:
+                        if board[pos_2[0]][pos_2[1]] == None:
+                            comp_move = pos_2
+                        else:
+                            comp_move = random_move()
+            print(comp_move)
             return comp_move
 
         self.move = 0
