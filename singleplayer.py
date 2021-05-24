@@ -107,19 +107,78 @@ class Ui_MainWindow(object):
                         return [p, all_pos.index(p)+1]
             return False
 
-        def comp_play(data):
-            none_data = []
-            for i in data:
-                for j in i:
-                    if j == None:
-                        d = [data.index(i), i.index(j)]
-                        none_data.append(d)
-            try:
-                rand = random.choice(none_data)
-                return rand
-            except:
-                return None
-            
+        def comp_play(move, recent_move, board):
+            def random_move():
+                other_pos = []
+                for i in board:
+                    for j in i:
+                        if j == None:
+                            other_pos.append([board.index(i), i.index(j)])
+                if len(other_pos) != 0:
+                    return random.choice(other_pos)
+                else:
+                    return None
+            if move == 1:
+                if board[1][1] == None:
+                    comp_move = [1,1]
+                else:
+                    comp_move = random.choice([[0,0], [0,2], [2,0], [2,2]])
+            else:
+                comp_move = recent_move
+                if 1 not in comp_move:
+                    if comp_move == [0,0]:
+                        pos = [
+                            [[0,1], [0,2]],
+                            [[1,0], [2,0]],
+                            [[1,1], [2,2]]
+                        ]
+                    elif comp_move == [0,2]:
+                        pos = [
+                            [[0,1], [0,0]],
+                            [[1,2], [2,2]],
+                            [[1,1], [2,0]]
+                        ]
+                    elif comp_move == [2,0]:
+                        pos = [
+                            [[2,1], [2,2]],
+                            [[1,0], [0,0]],
+                            [[1,1], [0,2]]
+                        ]
+                    else:
+                        pos = [
+                            [[2,1], [2,0]],
+                            [[1,2], [0,2]],
+                            [[1,1], [0,0]]
+                        ]
+                    pos_result = []
+                    for i in pos:
+                        res = 0
+                        for j in i:
+                            if board[j[0]][j[1]] == 0:
+                                res += 1
+                        pos_result.append(res)
+                    print(pos_result)
+                    max_pos = pos[pos_result.index(max(pos_result))]
+                    angle_pos = max_pos[1]
+                    if board[angle_pos[0]][angle_pos[1]] == None:
+                        comp_move = angle_pos
+                    else:
+                        if max_pos[0] != None:
+                            comp_move = random_move()
+                        else:
+                            comp_move = max_pos[0]
+
+                else:
+                    k = 0
+                    for i in recent_move:
+                        comp_move[k] = 2-i
+                        k += 1
+                    if board[comp_move[0]][comp_move[1]] != None:
+                        comp_move = random_move()
+            return comp_move
+
+        self.move = 0
+        self.recent_move = []
 
         self.is_done = False
         def tic_btn_click(index):
@@ -140,12 +199,15 @@ class Ui_MainWindow(object):
                         background-color: transparent;
                     }  
                     """)
-                    self.tic_tac_lst[index[0]][index[1]] = 1
+                    self.tic_tac_lst[index[0]][index[1]] = 0
+                    self.move += 1
+                    self.recent_move = index
                     result = who_won(self.tic_tac_lst)
                     if result == False:
-                        comp = comp_play(self.tic_tac_lst)
+                        comp = comp_play(self.move, self.recent_move, self.tic_tac_lst)
+                        print(index, comp)
                         if comp != None:
-                            self.tic_tac_lst[comp[0]][comp[1]] = 0
+                            self.tic_tac_lst[comp[0]][comp[1]] = 1
                             btn_comp = self.tic_lst[comp[0]][comp[1]]                          
                             btn_comp.setText("O")
                             btn_comp.setStyleSheet("""
@@ -194,6 +256,7 @@ class Ui_MainWindow(object):
 
         create_tic_box()
         def reset_clicked():
+            self.move = 0
             self.is_done = False
             self.tic_lst = []
             self.tic_tac_lst = [[None for i in range(3)] for j in range(3)]
