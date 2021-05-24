@@ -150,32 +150,46 @@ class Ui_MainWindow(object):
                             [[1,2], [0,2]],
                             [[1,1], [0,0]]
                         ]
-                    pos_result = []
-                    for i in pos:
-                        res = 0
-                        for j in i:
-                            if board[j[0]][j[1]] == 0:
-                                res += 1
-                        pos_result.append(res)
-                    print(pos_result)
-                    max_pos = pos[pos_result.index(max(pos_result))]
-                    print(max_pos)
-                    angle_pos = max_pos[1]
-                    if board[angle_pos[0]][angle_pos[1]] == None:
-                        comp_move = angle_pos
-                    else:
-                        middle_pos = max_pos[0]
-                        if board[middle_pos[0]][middle_pos[1]] == None:
-                            comp_move = middle_pos
-                        else:
-                            comp_move = random_move()
 
                 else:
-                    k = 0
-                    for i in recent_move:
-                        comp_move[k] = 2-i
-                        k += 1
-                    if board[comp_move[0]][comp_move[1]] != None:
+                    if comp_move == [1,0]:
+                        pos = [
+                            [[0,0], [2,0]],
+                            [[1,1], [1,2]]
+                        ]
+                    elif comp_move == [1,2]:
+                        pos = [
+                            [[0,2], [2,2]],
+                            [[1,0], [1,1]]
+                        ]
+                    elif comp_move == [0,1]:
+                        pos = [
+                            [[0,0], [0,2]],
+                            [[1,1], [2,1]]
+                        ]
+                    else:
+                        pos = [
+                            [[2,0], [2,2]],
+                            [[0,1], [1,1]]
+                        ]
+
+                pos_result = []
+                for i in pos:
+                    res = 0
+                    for j in i:
+                        if board[j[0]][j[1]] == 0:
+                            res += 1
+                    pos_result.append(res)
+
+                max_pos = pos[pos_result.index(max(pos_result))]
+                pos_1 = max_pos[1]
+                if board[pos_1[0]][pos_1[1]] == None:
+                    comp_move = pos_1
+                else:
+                    pos_2 = max_pos[0]
+                    if board[pos_2[0]][pos_2[1]] == None:
+                        comp_move = pos_2
+                    else:
                         comp_move = random_move()
             return comp_move
 
@@ -207,7 +221,7 @@ class Ui_MainWindow(object):
                     result = who_won(self.tic_tac_lst)
                     if result == False:
                         comp = comp_play(self.move, self.recent_move, self.tic_tac_lst)
-                        print(index, comp)
+                        #print(index, comp)
                         if comp != None:
                             self.tic_tac_lst[comp[0]][comp[1]] = 1
                             btn_comp = self.tic_lst[comp[0]][comp[1]]                          
